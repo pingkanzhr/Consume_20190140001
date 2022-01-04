@@ -86,17 +86,20 @@
     }
 
     function saveData(){
-    var body = new FormData()
-    body.append("kode", document.getElementById("kode").value)
-    body.append("model", document.getElementById("model").value)
-    body.append("size", document.getElementById("size").value)
-    body.append("warna", document.getElementById("warna").value)
-    body.append("harga", document.getElementById("harga").value)
+    var body = {
+      kode:$("#kode").val(),
+      model:$("#model").val(),
+      size:$("#size").val(),
+      warna:$("#warna").val(),
+      harga:$("#harga").val()
+    }
+    var json = JSON.stringify(body)
+    console.log(json)
     axios({
         method:"post",
         url:url, 
-        data:body, 
-        headers:{ "Content-Type": "multipart/form-data" }
+        data:json, 
+        headers:{ "Content-Type": "application/json" }
     })
     .then((result) => {
         console.log("data berhasil disimpan")   

@@ -6,19 +6,6 @@ function onSignIn(googleUser) {
     window.location.href="/data.html"
 }
 
-function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    console.log(gapi.auth2);
-    auth2.signOut().then(function() {
-      alert("User signed out");
-      localStorage.removeItem("nama");
-      localStorage.removeItem("image");
-      localStorage.removeItem("email");
-      window.location.href="/";
-    })
-    .catch(error => {console.log(error)});
-}
-
 function onLoad(){
     gapi.load("auth2", function(){
         gapi.auth2.init();
@@ -55,8 +42,8 @@ $("#tbl").ready(function () {
             td4.innerHTML = response[i].warna
             td5.innerHTML = response[i].harga
             td6.innerHTML = `<div class ="justify content-center">
-            <a class="btn btn-warning ms-2" onclick="edit();">Edit </a>
-            <button type ="button" class="btn btn-danger ms-2" onclick="delete();">Delete</button>
+            <a class="btn btn-warning ms-2" href="edit.html?kode=${response[i].kode}">Edit </a>
+            <button type ="button" class="btn btn-danger ms-2" onclick="del(${response[i].kode});">Delete</button>
             </div>`
             }
         }

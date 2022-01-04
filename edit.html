@@ -28,42 +28,40 @@
 
     <section>
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <a class="btn btn-success ms-2 mt-5" href="add.html">Tambahkan Data</a>
-                    <table id="tbl" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>
-                                    kode
-                                </th>
-                                <th>
-                                    model
-                                </th>
-                                <th>
-                                    size
-                                </th>
-                                <th>
-                                    warna
-                                </th>
-                                <th>
-                                    harga
-                                </th>
-                                <th id="tbl-aksi">
-                                    aksi 
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+            <h4> Add Data</h4>
+            <form>
+              <div class="row">
+                  <div class="form-group my-3">
+                    <label for="kode" class="form-label">Kode Baju</label>
+                    <input type="text" class="form-control" id="kode" placeholder="masukan kode">
+                  </div>
+                  <div class="form-group my-3">
+                    <label for="model" class="form-label">Model Baju</label>
+                    <input type="text" class="form-control" id="model" placeholder="masukan model">
+                  </div>
+                  <div class="form-group my-3">
+                    <label for="size" class="form-label">Size Baju</label>
+                    <input type="text" class="form-control" id="size" placeholder="masukan size">
+                  </div>
+                  <div class="form-group my-3">
+                    <label for="warna" class="form-label">Warna Baju</label>
+                    <input type="text" class="form-control" id="warna" placeholder="masukan warna">
+                  </div>
+                  <div class="form-group my-3">
+                    <label for="harga" class="form-label">Harga Baju</label>
+                    <input type="text" class="form-control" id="harga" placeholder="masukan harga">
+                  </div>
+                  <button type="button" class="btn btn-success ms-2 mt-4" onclick="saveData();">Save Data</button>
+            </div>  
+            </form>
             </div>
         </div>
+                    
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="axiosService.js"></script>
-    <script src="./index.js"></script>
     <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <script>
     function signOut() {
@@ -86,18 +84,48 @@
         })
     }
 
-    function del(kode){
-        if (window.confirm("Apakah anda ingin menghapus data?")===true) {
-            axios.delete(`http://localhost:8080/data/oushop/${kode}`).then((result) => {
-                alert("hapus data berhasil")
-                window.location.href="/data.html"
-            }).catch((err) => {
-                console.log(err)
-            });
-        }
+    function saveData(){
+    var body = {
+      kode:$("#kode").val(),
+      model:$("#model").val(),
+      size:$("#size").val(),
+      warna:$("#warna").val(),
+      harga:$("#harga").val()
+    }
+    var json = JSON.stringify(body)
+    console.log(json)
+    axios({
+        method:"put",
+        url:url, 
+        data:json, 
+        headers:{ "Content-Type": "application/json" }
+    })
+    .then((result) => {
+        console.log("data berhasil disimpan")   
+    }).catch((err) => {
+        console.log(error)
+    });
+}
+    function getData(){
+        var url = new URL($(location).attr("href"))
+        var params = url.searchParams.get("kode")
+        console.log(params)
+        axios.get(
+            `http://localhost:8080/data/oushop/${params}`
+        ).then((result) => {
+            console.log(result)
+            $("#kode").val(result.data.kode);
+            $("#model").val(result.data.model);
+            $("#size").val(result.data.size);
+            $("#warna").val(result.data.warna);
+            $("#harga").val(result.data.harga)
+        }).catch((err) => {
+            console.log(error)
+        });
     }
 
     var url ="http://localhost:8080/data/oushop";
+    getData()
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
